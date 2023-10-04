@@ -1,0 +1,42 @@
+# Define Doctor Model
+class Doctor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+  
+
+# Define Schedule Model
+class Schedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'), nullable=False)
+    day = db.Column(db.String(10), nullable=False)  # E.g., "Monday", "Tuesday"
+    max_appointments = db.Column(db.Integer, nullable=False)
+
+
+# Define Appointment Model
+class Appointment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'), nullable=False)
+    patient_name = db.Column(db.String(255), nullable=False)
+    appointment_date = db.Column(db.Date, nullable=False)
+   
+
+# API Endpoints
+@app.route('/doctors', methods=['GET'])
+def get_doctors():
+    doctors = Doctor.query.all()
+   
+@app.route('/doctors/<int:doctor_id>', methods=['GET'])
+def get_doctor_detail(doctor_id):
+    doctor = Doctor.query.get_or_404(doctor_id)
+    
+
+@app.route('/book-appointment', methods=['POST'])
+def book_appointment():
+    data = request.get_json()
+    doctor_id = data.get('doctor_id')
+    appointment_date = data.get('appointment_date')
+ 
+
+if __name__ == '__main__':
+    db.create_all()
+    app.run()
