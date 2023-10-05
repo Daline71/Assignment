@@ -1,0 +1,88 @@
+
+
+1. **Doctor Listing Endpoint**
+   - Endpoint: `/doctors`
+   - HTTP Method: GET
+   - Description: This endpoint will return a list of doctors practicing at the specified location.
+   - Logic:
+     - Retrieve a list of doctors who practice at the specified location.
+     - Include information such as the doctor's name, specialization, and the number of available appointment slots for the upcoming week.
+
+
+   - Sample Output:
+     ```json
+     [
+       {
+         "id": 1,
+         "name": "Dr. John Doe",
+         "specialization": "Cardiologist",
+         "available_slots": [
+           {
+             "date": "2023-10-02",
+             "slots": ["17:00", "17:30", "18:00"]
+           },
+           {
+             "date": "2023-10-03",
+             "slots": ["17:30", "18:00"]
+           }
+         ]
+       },
+     ]
+     ```
+
+2. **Doctor Detail Page Endpoint**
+   - Endpoint: `/doctors/{doctor_id}`
+   - HTTP Method: GET
+   - Description: This endpoint will provide detailed information about a specific doctor.
+   - Logic:
+     - Retrieve the doctor's information based on the `doctor_id`.
+     - Include details about the doctor's specialization, working hours, and any other relevant information.
+
+
+   - Sample Output:
+     ```json
+     {
+       "id": 1,
+       "name": "Dr. John Doe",
+       "specialization": "Cardiologist",
+       "working_hours": {
+         "start_time": "17:00",
+         "end_time": "20:00",
+         "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+       },
+       "location": "XYZ Medical Center",
+     }
+     ```
+
+3. **Appointment Booking Endpoint**
+   - Endpoint: `/appointments`
+   - HTTP Method: POST
+   - Description: This endpoint allows patients to book an appointment with a doctor.
+   - Logic:
+     - Check if the requested date and time are available for booking.
+     - If available, create an appointment record and reduce the doctor's available slots.
+
+
+   - Sample Input:
+     ```json
+     {
+       "doctor_id": 1,
+       "patient_name": "Alice",
+       "appointment_date": "2023-10-02",
+       "appointment_time": "17:00"
+     }
+     ```
+
+   - Sample Output (Success):
+     ```json
+     {
+       "message": "Appointment booked successfully."
+     }
+     ```
+
+   - Sample Output (Error - Slot not available):
+     ```json
+     {
+       "error": "Appointment slot not available. Please choose a different time."
+     }
+     ```
